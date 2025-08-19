@@ -39,7 +39,7 @@ if (!$receipt) {
 $itemSql = "
     SELECT i.name, oi.quantity, oi.unit_price
     FROM order_item oi
-    JOIN item i ON oi.item_id = i.id
+    JOIN starbucksitem i ON oi.item_id = i.id
     WHERE oi.order_id = ?
 ";
 $stmtItems = $con->prepare($itemSql);

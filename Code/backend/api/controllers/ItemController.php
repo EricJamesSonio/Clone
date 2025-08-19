@@ -22,7 +22,6 @@ function addItem($con) {
     $success = $itemModel->addItem(
         $data['name'],
         floatval($data['price']),
-        intval($data['quantity']),
         intval($data['category_id']),
         intval($data['subcategory_id']),
         $data['description']
@@ -38,7 +37,6 @@ function updateItem($con) {
         intval($data['id']),
         $data['name'],
         floatval($data['price']),
-        intval($data['quantity']),
         $data['description']
     );
 
@@ -88,3 +86,4 @@ function searchInventoryItems($con) {
         "data" => $results
     ]);
 }
+
