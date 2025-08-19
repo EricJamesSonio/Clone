@@ -1,4 +1,10 @@
 <?php
+header('Content-Type: application/json');
+
+// Ensure DB connection exists even if this file is accessed directly (not via index router)
+if (!isset($con)) {
+    require_once dirname(__DIR__, 3) . '/database/db2.php';
+}
 
 require_once __DIR__ . '/../controllers/itemController.php';
 

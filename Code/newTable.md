@@ -31,9 +31,7 @@ createTable($con, 'starbucksitem', "
     CREATE TABLE starbucksitem (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(100) NOT NULL,
-        price DECIMAL(10,2) NOT NULL,
-        quantity INT DEFAULT 0,
-        category_id INT NOT NULL,
+        price DECIMAL(10,2) NOT NULL,        category_id INT NOT NULL,
         subcategory_id INT NOT NULL,
         description TEXT,
         image_url VARCHAR(255), 

@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors', 1);
+ini_set('display_errors', 0);
 ini_set('html_errors', 0);
 header("Content-Type: application/json");
 error_reporting(E_ALL);
@@ -55,16 +55,16 @@ class CartController {
     }
 
     private function handlePost(): void {
-        $payload = json_decode(file_get_contents('php://input'), true);
+        $input = file_get_contents('php://input');
+        $payload = json_decode($input, true);
 
-        if (!is_array($payload)) {
-            $this->respond(["error" => "Invalid JSON payload"], 400);
+        if (!is_array($payload) || json_last_error() !== JSON_ERROR_NONE) {
+            $this->respond(["error" => "Invalid JSON payload", "debug" => $input], 400);
         }
 
         $itemId = filter_var($payload['item_id'] ?? null, FILTER_VALIDATE_INT);
         $sizeId = isset($payload['size_id']) ? filter_var($payload['size_id'], FILTER_VALIDATE_INT) : null;
         $quantity = filter_var($payload['quantity'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
-        $unitPrice = filter_var($payload['unit_price'] ?? null, FILTER_VALIDATE_FLOAT);
 
         if (!$itemId || !$quantity) {
             $this->respond(["error" => "Missing item_id or quantity"], 400);
@@ -85,7 +85,7 @@ class CartController {
                 $this->respond(["error" => "Failed to add item"], 500);
             }
         } else {
-            // Guest session-only cart
+            // Guest session-only cart - calculate price dynamically
             if (!isset($_SESSION['cart'])) $_SESSION['cart'] = [];
 
             $found = false;
@@ -101,8 +101,7 @@ class CartController {
                 $_SESSION['cart'][] = [
                     "item_id" => $itemId,
                     "size_id" => $sizeId,
-                    "quantity" => $quantity,
-                    "price" => $unitPrice
+                    "quantity" => $quantity
                 ];
             }
 

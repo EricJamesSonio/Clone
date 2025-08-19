@@ -2,7 +2,7 @@
 $HOSTNAME = 'localhost';
 $USERNAME = 'root';
 $PASSWORD = ''; 
-$DATABASE = 'softeng3';
+$DATABASE = 'softeng2';
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 

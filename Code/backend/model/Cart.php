@@ -12,7 +12,9 @@ class Cart {
               ci.id           AS cart_item_id,
               si.id           AS item_id,
               si.name,
-              si.price,
+              si.price        AS base_price,
+              COALESCE(sz.price_modifier, 0) AS size_modifier,
+              (si.price + COALESCE(sz.price_modifier, 0)) AS price,
               ci.quantity,
               ci.size_id,
               sz.name        AS size_name
@@ -57,7 +59,7 @@ class Cart {
 
     if ($exists) {
         $upd = $this->con->prepare(
-            "UPDATE cart_item SET quantity = ? WHERE id = ?"
+            "UPDATE cart_item SET quantity = quantity + ? WHERE id = ?"
         );
         $upd->bind_param("ii", $quantity, $exists['id']);
         $ok = $upd->execute();
@@ -102,7 +104,9 @@ class Cart {
             ci.id           AS cart_item_id,
             si.id           AS item_id,
             si.name,
-            si.price,
+            si.price        AS base_price,
+            COALESCE(sz.price_modifier, 0) AS size_modifier,
+            (si.price + COALESCE(sz.price_modifier, 0)) AS price,
             ci.quantity,
             ci.size_id,
             sz.name        AS size_name

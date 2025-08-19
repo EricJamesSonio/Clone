@@ -32,25 +32,18 @@ public function getFilteredItems($category_id = 0, $subcategory_id = 0) {
         LEFT JOIN subcategory s ON i.subcategory_id = s.id
         WHERE 1=1
     ";
-    $types = "";
-    $params = [];
+    $stmt = $this->conn->prepare($sql
+        . ($category_id ? " AND i.category_id = ?" : "")
+        . ($subcategory_id ? " AND i.subcategory_id = ?" : "")
+    );
 
-    if ($category_id) {
-        $sql .= " AND i.category_id = ?";
-        $types .= "i";
-        $params[] = $category_id;
-    }
-
-    if ($subcategory_id) {
-        $sql .= " AND i.subcategory_id = ?";
-        $types .= "i";
-        $params[] = $subcategory_id;
-    }
-
-    $stmt = $this->conn->prepare($sql);
-
-    if ($params) {
-        $stmt->bind_param($types, ...$params);
+    // Bind explicitly to avoid issues with variadics and by-reference requirements
+    if ($category_id && $subcategory_id) {
+        $stmt->bind_param("ii", $category_id, $subcategory_id);
+    } elseif ($category_id) {
+        $stmt->bind_param("i", $category_id);
+    } elseif ($subcategory_id) {
+        $stmt->bind_param("i", $subcategory_id);
     }
 
     $stmt->execute();

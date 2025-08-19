@@ -35,7 +35,8 @@ class PaymentController {
             ]);
         } else {
             http_response_code(500);
-            echo json_encode(["message" => "Payment failed."]);
+            $errorMsg = is_array($result) && isset($result['error']) ? $result['error'] : "Payment failed.";
+            echo json_encode(["message" => "Payment failed.", "error" => $errorMsg]);
         }
     }
 }

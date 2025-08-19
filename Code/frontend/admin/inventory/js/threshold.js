@@ -126,7 +126,7 @@ class InventoryUI {
 // ===== Initialization =====
 const basePath = (typeof window !== 'undefined' && window.API_BASE_PATH)
   ? window.API_BASE_PATH.replace(/\/+$/, '') // remove trailing slash
-  : `${window.location.origin}/starbucks-ecommerce/code/api`;
+  : `${window.location.origin}/Clone/starbucks/code/api`;
 
 const inventoryAPI = new InventoryAPI(basePath);
 new InventoryUI(inventoryAPI);

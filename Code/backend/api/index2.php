@@ -1,9 +1,10 @@
 <?php
 // ✅ Error settings for API safety
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+ini_set('display_errors', 0); // Turn off error display for clean JSON
+ini_set('display_startup_errors', 0);
 error_reporting(E_ALL);
 ini_set('html_errors', 0); // prevents HTML tags in errors
+ini_set('log_errors', 1); // Log errors instead of displaying them
 
 // ✅ Start output buffering to catch warnings
 ob_start();

@@ -44,7 +44,7 @@ class Modal {
         const selectedOption = this.sizeSelect.options[this.sizeSelect.selectedIndex];
         const sizeId = selectedOption.value;
         const mod = parseFloat(selectedOption.dataset.modifier);
-        const unitPrice = parseFloat(this.currentItem.price) + mod; // not used in payload but kept for logic clarity
+        const unitPrice = parseFloat(this.currentItem.price) + mod;
 
         const payload = {
             item_id: this.currentItem.id,
