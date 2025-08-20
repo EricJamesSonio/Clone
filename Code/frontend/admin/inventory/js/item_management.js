@@ -1,8 +1,10 @@
 class ItemManager {
   constructor() {
-    this.basePath = (typeof window !== 'undefined' && window.API_BASE_PATH)
-      ? window.API_BASE_PATH.replace(/\/+$/, '')
-      : `${window.location.origin}/Clone/starbucks/code/api`;
+    if (!window.API_BASE_PATH) {
+      throw new Error("API_BASE_PATH is not defined. Ensure config.js is loaded before item_management.js");
+    }
+
+    this.basePath = window.API_BASE_PATH.replace(/\/+$/, '');
     this.API_ITEMS = `${this.basePath}/items`;
 
     this.categorySelect = document.getElementById("categorySelect");
@@ -40,7 +42,6 @@ class ItemManager {
 
   async loadSubcategories(categoryId) {
     try {
-      // Correct endpoint: dedicated subcategories route
       const res = await fetch(`${this.basePath}/subcategories?category_id=${categoryId}`, { credentials: 'include' });
       const result = await res.json();
 
@@ -165,12 +166,10 @@ class ItemManager {
   }
 
   bindEvents() {
-    // Category change → load subcategories
     this.categorySelect.addEventListener("change", (e) => {
       this.loadSubcategories(e.target.value);
     });
 
-    // Add item form submit
     this.addItemForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const newItem = {
@@ -183,7 +182,6 @@ class ItemManager {
       this.addItem(newItem);
     });
 
-    // Update / delete buttons
     document.querySelector("#itemTable").addEventListener("click", (e) => {
       const row = e.target.closest("tr");
       if (!row) return;
@@ -206,7 +204,6 @@ class ItemManager {
       }
     });
 
-    // Search input
     this.searchInput?.addEventListener('input', () => {
       const query = this.searchInput.value.trim();
       if (query.length < 1) {
@@ -219,14 +216,12 @@ class ItemManager {
       }, 300);
     });
 
-    // Back button
     document.getElementById("btnBack").addEventListener("click", () => {
       window.location.href = "../inventory.html";
     });
   }
 }
 
-// Initialize
 document.addEventListener("DOMContentLoaded", () => {
   const manager = new ItemManager();
   manager.init();

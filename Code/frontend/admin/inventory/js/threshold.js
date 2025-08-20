@@ -1,6 +1,10 @@
 class InventoryAPI {
-  constructor(basePath) {
-    this.API = `${basePath}/inventory`;
+  constructor() {
+    if (!window.API_BASE_PATH) {
+      throw new Error("API_BASE_PATH is not defined. Make sure config.js is loaded first.");
+    }
+
+    this.API = `${window.API_BASE_PATH.replace(/\/+$/, '')}/inventory`;
   }
 
   async getSetting() {
@@ -124,9 +128,7 @@ class InventoryUI {
 }
 
 // ===== Initialization =====
-const basePath = (typeof window !== 'undefined' && window.API_BASE_PATH)
-  ? window.API_BASE_PATH.replace(/\/+$/, '') // remove trailing slash
-  : `${window.location.origin}/Clone/starbucks/code/api`;
-
-const inventoryAPI = new InventoryAPI(basePath);
-new InventoryUI(inventoryAPI);
+document.addEventListener("DOMContentLoaded", () => {
+  const inventoryAPI = new InventoryAPI(); // No need to pass basePath anymore
+  new InventoryUI(inventoryAPI);
+});
